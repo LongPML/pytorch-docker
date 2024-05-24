@@ -63,27 +63,27 @@
 FROM nvcr.io/nvidia/pytorch:21.10-py3
 
 # Timezone
-RUN echo 'Etc/UTC' > /etc/timezone && \
+RUN echo 'Asia/Ho_Chi_Minh' > /etc/timezone && \
     ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime  
 
 # Essential packages
-RUN apt-get update && apt-get install -y \
-    build-essential curl lsb-release 
+RUN apt-get update && apt-get install -y --no-install-recommends\
+    build-essential curl 
 
 # ROS
-RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list'
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 
 
 RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends\
     ros-noetic-desktop-full 
-RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && . ~/.bashrc
 
 RUN apt-get install -y --no-install-recommends \
     python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool
 RUN apt-get install -y --no-install-recommends \
     python3-rosdep && rosdep init && rosdep update \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean &&rm -rf /var/lib/apt/lists/*
 
 
 CMD ["bash"]

@@ -79,11 +79,10 @@ RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends\
     ros-noetic-desktop-full 
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && . ~/.bashrc
 
-RUN apt-get install -y --no-install-recommends \
-    python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool
-RUN apt-get install -y --no-install-recommends \
-    python3-rosdep && rosdep init && rosdep update \
-    && apt-get clean &&rm -rf /var/lib/apt/lists/*
+RUN pip install empy catkin_pkg rosdep rosinstall rosinstall-generator wstool
+RUN rosdep init && rosdep update
 
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 CMD ["bash"]
